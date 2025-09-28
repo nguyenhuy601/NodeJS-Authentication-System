@@ -1,3 +1,4 @@
+//NguyenHuynhNhatHuy-22681181
 import mongoose from 'mongoose';  // Importing mongoose for MongoDB interactions
 
 // Defining the schema for the User model

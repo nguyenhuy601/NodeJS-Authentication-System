@@ -1,3 +1,4 @@
+//NguyenHuynhNhatHuy-22681181
 import mongoose from "mongoose";  // Importing mongoose for MongoDB interactions
 import User from "../models/userModel.js";  // Importing User model
 import bcrypt from "bcrypt";  // Importing bcrypt for password hashing
@@ -54,16 +55,19 @@ export  class UserPostController {
     //sign up
     createUser = async (req, res) => {
         const { username, email, password,cpassword } = req.body;
+        const recaptcha = req.body['g-recaptcha-response'];
         if (password !== cpassword) {
             return res.status(400).render("signup",{message:"Passwords don't match"});
         }
+        //check reCAPTCHA
+        if (!recaptcha) { return res.status(404).render("signup",{message:"Please select captcha"}); }
         //check if user already exists
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
             return res.status(400).render("signup",{message:"User already exists"});
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, email,password:hashedPassword });
+        const newUser = new User({ username, email,password:hashedPassword, cpassword: hashedPassword });
         try {
             await newUser.save();
             res.status(201).render("signin",{message:"User created successfully"});
@@ -76,11 +80,11 @@ export  class UserPostController {
     signInUser = async (req, res) => {
         const { email, password } = req.body;
         //Recaptcha
-        const recaptcha = req.body['g-recaptcha-response'];
+        // const recaptcha = req.body['g-recaptcha-response'];
 
-        if (recaptcha === undefined || recaptcha === '' || recaptcha === null) {
-            return res.status(404).render("signin",{message:"Please select captcha"});
-        }
+        // if (recaptcha === undefined || recaptcha === '' || recaptcha === null) {
+        //     return res.status(404).render("signin",{message:"Please select captcha"});
+        // }
         // const secretKey = process.env.RECAPTCHA_SECRET_KEY;
         // const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptcha}`;
         // const response = await fetch(url, {
@@ -89,7 +93,8 @@ export  class UserPostController {
         //         "Content-Type": "application/x-www-form-urlencoded; charset=utf-8"
         //     }
         // });
-
+        // const data = await response.json();
+        // if (!data.success) return res.status(400).render("signin",{message:"Captcha failed"});
         try {
             const existingUser = await User.findOne({ email: email});
             

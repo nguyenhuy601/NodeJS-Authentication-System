@@ -1,3 +1,4 @@
+//NguyenHuynhNhatHuy-22681181
 import express from "express"; // Importing express for the web framework
 import bodyParser from "body-parser"; // Importing bodyParser for parsing request bodies
 import ejsLayouts from "express-ejs-layouts"; // Importing express-ejs-layouts for layout support
@@ -37,8 +38,7 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL:
-        "https://nodejs-authentication-system-l2pu.onrender.com/auth/google/callback",
+      callbackURL: process.env.CLIENT_URL,
       scope: ["profile", "email"],
     },
     function (accessToken, refreshToken, profile, callback) {

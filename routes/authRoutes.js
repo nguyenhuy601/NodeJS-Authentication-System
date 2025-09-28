@@ -1,3 +1,4 @@
+//NguyenHuynhNhatHuy-22681181
 import passport from 'passport';  // Importing passport for authentication
 import express from 'express';    // Importing express for the web framework
 import { googleSignInController } from '../controllers/authController.js';  // Importing the Google sign-in controller
@@ -14,8 +15,8 @@ authRouter.get("/google", passport.authenticate('google', { scope: ['email', 'pr
 // Google OAuth2 callback
 authRouter.get("/google/callback",
     passport.authenticate("google", {
-        successRedirect: process.env.CLIENT_URL,
-        failureRedirect: "/login/failed"
+        successRedirect: "/auth/login/success",
+        failureRedirect: "/auth/login/failed"
     })
 );
 
